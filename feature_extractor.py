@@ -5,27 +5,14 @@ import cv2
 from tqdm import tqdm
 import insightface
 
-
-# =================================================
-# CONFIG
-# =================================================
 DATASET_PATH = "data"
 
-
-# =================================================
-# 🔥 Load ArcFace (FAST + ACCURATE)
-# =================================================
 print("🔄 Loading ArcFace model...")
 
 app = insightface.app.FaceAnalysis(name="buffalo_l")
 
-# 320 = much faster, almost same accuracy
 app.prepare(ctx_id=0, det_size=(320, 320))
 
-
-# =================================================
-# Collect all image paths
-# =================================================
 all_paths = []
 
 for root, dirs, files in os.walk(DATASET_PATH):
@@ -36,10 +23,6 @@ for root, dirs, files in os.walk(DATASET_PATH):
 print(f"✅ Found {len(all_paths)} images")
 print("🚀 Extracting embeddings...\n")
 
-
-# =================================================
-# Feature extraction
-# =================================================
 filenames = []
 features = []
 
@@ -56,7 +39,6 @@ for path in tqdm(all_paths, desc="Processing", unit="img"):
         skipped_bad += 1
         continue
 
-    # 🔥 VERY IMPORTANT (ArcFace expects RGB)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
     faces = app.get(img)
@@ -81,34 +63,17 @@ for path in tqdm(all_paths, desc="Processing", unit="img"):
     features.append(embedding)
     filenames.append(path)
 
-
-# =================================================
-# Convert safely
-# =================================================
 if len(features) == 0:
     print("❌ No embeddings found. Check dataset.")
     exit()
 
-# safer than np.array()
 features = np.vstack(features).astype("float32")
 
-
-# =================================================
-# 🔥 Normalize (IMPORTANT for cosine similarity)
-# =================================================
 features = features / np.linalg.norm(features, axis=1, keepdims=True)
 
-
-# =================================================
-# Save
-# =================================================
 pickle.dump(features, open("embedding.pkl", "wb"))
 pickle.dump(filenames, open("filenames.pkl", "wb"))
 
-
-# =================================================
-# Stats
-# =================================================
 print("\n✅ Done!")
 print(f"💾 Saved embeddings : {len(features)}")
 print(f"⚠️ No face         : {skipped_no_face}")
