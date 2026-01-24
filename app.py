@@ -8,16 +8,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 import insightface
 import random
 
-
-# =================================================
-# PAGE CONFIG
-# =================================================
 st.set_page_config(page_title="Bollywood Celebrity Matcher", layout="centered")
 
-
-# =================================================
-# LOAD ARC FACE MODEL (cached)
-# =================================================
 @st.cache_resource
 def load_arcface():
     app = insightface.app.FaceAnalysis(name="buffalo_l")
@@ -32,17 +24,14 @@ feature_list = pickle.load(open("embedding.pkl","rb"))
 filenames = pickle.load(open("filenames.pkl","rb"))
 
 
-# =================================================
 FUN_LINES = [
-    "Arre bhai 😂 full hero lag rahe ho!",
-    "Bollywood calling you 😎",
+    "Arre bhai full hero lag rahe ho!",
+    "Bollywood calling you",
     "Direct main lead vibes!",
     "Side role? Impossible bro!",
-    "Next superstar spotted ⭐"
+    "Next superstar spotted"
 ]
 
-
-# =================================================
 def save_image(img_file):
     os.makedirs("uploads", exist_ok=True)
     path = os.path.join("uploads", img_file.name)
@@ -52,10 +41,6 @@ def save_image(img_file):
 
     return path
 
-
-# =================================================
-# 🔥 ArcFace feature extractor
-# =================================================
 def extract_features(path):
 
     img = cv2.imread(path)
@@ -71,8 +56,6 @@ def extract_features(path):
 
     return feat / np.linalg.norm(feat)
 
-
-# =================================================
 def recommend(feat):
 
     sims = cosine_similarity([feat], feature_list)[0]
@@ -81,8 +64,6 @@ def recommend(feat):
 
     return idx, sims[idx]
 
-
-# =================================================
 def create_result_poster(user_img, celeb_img, actor, conf):
 
     user_img = user_img.resize((400,400))
@@ -104,12 +85,7 @@ def create_result_poster(user_img, celeb_img, actor, conf):
 
     return path
 
-
-# =================================================
-# ================= UI ============================
-# =================================================
-
-st.title("🎭 Bollywood Celebrity Face Matcher")
+st.title("Bollywood Celebrity Face Matcher")
 
 
 mode = st.radio("Choose input method:", ["Upload Image", "Webcam Capture"], index=0)
@@ -129,10 +105,6 @@ else:
     if cam:
         img_path = save_image(cam)
 
-
-# =================================================
-# RESULT
-# =================================================
 if img_path:
 
     user_img = Image.open(img_path)
