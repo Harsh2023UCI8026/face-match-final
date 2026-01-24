@@ -1,7 +1,7 @@
 streamlit
 insightface
 onnxruntime
-opencv-python
+opencv-python-headless
 numpy
 scikit-learn
 pillow
