@@ -1,5 +1,7 @@
 import streamlit as st
 import os
+if not os.path.exists("data"):
+    import download_data
 import cv2
 import pickle
 import numpy as np
