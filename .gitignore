@@ -1,5 +1,20 @@
 # Google Drive zip
-actor-drive.zip
+data-easy-actor-zip.zip
+
+uploads/
+
+__pycache__/
+*.pyc
+
+venv/
+.venv/
+env/
+
+.idea/
+.vscode/
+
+.DS_Store
+Thumbs.db
 
 # Uploads
 uploads/
