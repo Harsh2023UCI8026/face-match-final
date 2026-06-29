@@ -1,1 +1,25 @@
+# Google Drive zip
+actor-drive.zip
 
+# Uploads
+uploads/
+
+# Any zip file
+*.zip
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
